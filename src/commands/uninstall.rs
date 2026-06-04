@@ -1,3 +1,4 @@
+use crate::commands::hooks::{load_settings, save_settings, settings_path, unregister_hook};
 use crate::commands::install::skills_install_dir;
 use anyhow::Result;
 use std::fs;
@@ -14,5 +15,13 @@ pub fn run() -> Result<()> {
         }
     }
     eprintln!("Skills uninstalled from {}", skills_dir.display());
+    let path = settings_path();
+    if path.exists() {
+        let mut settings = load_settings(&path)?;
+        if unregister_hook(&mut settings) {
+            save_settings(&path, &settings)?;
+            eprintln!("Removed SessionStart hook from {}", path.display());
+        }
+    }
     Ok(())
 }

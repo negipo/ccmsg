@@ -1,3 +1,4 @@
+use crate::commands::hooks::{load_settings, register_hook, save_settings, settings_path};
 use anyhow::Result;
 use std::fs;
 use std::path::PathBuf;
@@ -24,6 +25,14 @@ pub fn run() -> Result<()> {
         eprintln!("Installed: {}", path.display());
     }
     eprintln!("Skills installed to {}", skills_dir.display());
+    let path = settings_path();
+    let mut settings = load_settings(&path)?;
+    if register_hook(&mut settings) {
+        save_settings(&path, &settings)?;
+        eprintln!("Registered SessionStart hook in {}", path.display());
+    } else {
+        eprintln!("SessionStart hook already registered in {}", path.display());
+    }
     Ok(())
 }
 
