@@ -154,3 +154,16 @@ fn test_receive_once_holds_read_on_collision() {
     }
     assert_eq!(db.peek_unread("repo-b").unwrap().len(), 1);
 }
+
+#[test]
+fn test_reset_clears_messages_and_agents() {
+    let db = Database::in_memory().unwrap();
+    db.register_self("repo-a", "/p/repo-a").unwrap();
+    db.register_self("repo-b", "/p/repo-b").unwrap();
+    db.send_message("repo-a", "repo-b", "hi").unwrap();
+
+    db.reset().unwrap();
+
+    assert_eq!(db.list_agents().unwrap(), Vec::<String>::new());
+    assert_eq!(db.peek_unread("repo-b").unwrap().len(), 0);
+}

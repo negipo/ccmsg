@@ -143,3 +143,18 @@ fn test_wait_returns_preexisting_unread_immediately() {
     let stdout = String::from_utf8_lossy(&waited.stdout);
     assert!(stdout.contains("queued"));
 }
+
+#[test]
+fn test_reset_with_yes_clears_db() {
+    let bin = ccmsg_bin();
+    let tmp = TempDir::new().unwrap();
+    let db = tmp.path().join("messages.db");
+
+    run(&bin, &db, &["inbox", "--project", "/p/alpha"]);
+    let reset = run(&bin, &db, &["reset", "--yes"]);
+    assert!(reset.status.success());
+
+    let listed = run(&bin, &db, &["list"]);
+    let stdout = String::from_utf8_lossy(&listed.stdout);
+    assert!(stdout.contains("No known peers"));
+}

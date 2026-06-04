@@ -32,6 +32,12 @@ pub enum Commands {
     },
     /// List known peers (directory names)
     List,
+    /// Reset all ccmsg state (messages and peers)
+    Reset {
+        /// Skip the confirmation prompt
+        #[arg(long)]
+        yes: bool,
+    },
     /// Install skills to ~/.claude/skills/
     Install,
     /// Remove the installed skills
