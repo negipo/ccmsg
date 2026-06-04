@@ -115,10 +115,10 @@ impl Database {
     /// 宛先未知・自分宛・空本文はエラーで停止する。
     pub fn send_message(&self, from: &str, to: &str, body: &str) -> Result<()> {
         if body.trim().is_empty() {
-            bail!("空のメッセージは送信できません");
+            bail!("cannot send an empty message");
         }
         if from == to {
-            bail!("自分自身宛には送信できません");
+            bail!("cannot send a message to yourself");
         }
         let known: bool = {
             let mut stmt = self.conn.prepare("SELECT 1 FROM agents WHERE name = ?1")?;
@@ -126,7 +126,7 @@ impl Database {
         };
         if !known {
             bail!(
-                "宛先 '{}' は未知です。相手が一度 /ccmsg を実行して参加すれば送信できます",
+                "destination '{}' is unknown. Once they run /ccmsg to join, you can send to them",
                 to
             );
         }

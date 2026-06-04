@@ -13,7 +13,7 @@ pub fn run(project: &str) -> Result<()> {
         } => {
             print_collision(&name, &existing_path);
             print_messages(&name, &unread);
-            eprintln!("（衝突のため既読化を保留しました）");
+            eprintln!("(marking-as-read held back due to collision)");
         }
     }
     Ok(())
@@ -21,10 +21,10 @@ pub fn run(project: &str) -> Result<()> {
 
 pub fn print_messages(name: &str, msgs: &[Message]) {
     if msgs.is_empty() {
-        println!("{} 宛の未読はありません", name);
+        println!("No unread messages for {}", name);
         return;
     }
-    println!("{} 宛の未読 {} 件:", name, msgs.len());
+    println!("{} unread message(s) for {}:", msgs.len(), name);
     for m in msgs {
         println!("- [{}] {}: {}", m.created_at, m.from_agent, m.body);
     }
@@ -32,7 +32,7 @@ pub fn print_messages(name: &str, msgs: &[Message]) {
 
 pub fn print_collision(name: &str, existing_path: &str) {
     eprintln!(
-        "警告: identity '{}' は別のパス ({}) で既に登録されています。どちらかのディレクトリ名を変えて解消してください",
+        "warning: identity '{}' is already registered under a different path ({}). Resolve it by renaming one of the directories",
         name, existing_path
     );
 }

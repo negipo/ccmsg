@@ -18,7 +18,7 @@ pub fn run(project: &str, timeout: u64) -> Result<()> {
             } => {
                 print_collision(&name, &existing_path);
                 print_messages(&name, &unread);
-                eprintln!("（衝突のため既読化を保留しました）");
+                eprintln!("(marking-as-read held back due to collision)");
                 return Ok(());
             }
             ReceiveOutcome::Claimed(msgs) if !msgs.is_empty() => {
@@ -27,7 +27,7 @@ pub fn run(project: &str, timeout: u64) -> Result<()> {
             }
             ReceiveOutcome::Claimed(_) => {
                 if Instant::now() >= deadline {
-                    println!("新着はありませんでした（タイムアウト {} 秒）", timeout);
+                    println!("No new messages (timed out after {} seconds)", timeout);
                     return Ok(());
                 }
                 sleep(Duration::from_secs(1));

@@ -8,13 +8,13 @@ pub fn run(to: &str, body: &str, project: &str) -> Result<()> {
 
     if let RegisterOutcome::Collision { existing_path } = db.register_self(&from, project)? {
         bail!(
-            "identity '{}' が別のパス ({}) と衝突しています。誤配信を防ぐため送信を中止しました",
+            "identity '{}' collides with a different path ({}). Aborted sending to prevent misdelivery",
             from,
             existing_path
         );
     }
 
     db.send_message(&from, to, body)?;
-    println!("{} -> {}: 送信しました", from, to);
+    println!("{} -> {}: sent", from, to);
     Ok(())
 }

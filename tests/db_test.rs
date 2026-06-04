@@ -70,7 +70,7 @@ fn test_send_to_self_fails() {
     let db = Database::in_memory().unwrap();
     db.register_self("repo-a", "/p/repo-a").unwrap();
     let err = db.send_message("repo-a", "repo-a", "hello").unwrap_err();
-    assert!(err.to_string().contains("自分自身"));
+    assert!(err.to_string().contains("yourself"));
 }
 
 #[test]
@@ -79,7 +79,7 @@ fn test_send_empty_body_fails() {
     db.register_self("repo-a", "/p/repo-a").unwrap();
     db.register_self("repo-b", "/p/repo-b").unwrap();
     let err = db.send_message("repo-a", "repo-b", "   ").unwrap_err();
-    assert!(err.to_string().contains("空"));
+    assert!(err.to_string().contains("empty"));
 }
 
 #[test]

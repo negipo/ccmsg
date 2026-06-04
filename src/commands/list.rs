@@ -5,10 +5,10 @@ pub fn run() -> Result<()> {
     let db = Database::open()?;
     let names = db.list_agents()?;
     if names.is_empty() {
-        println!("既知の宛先はありません");
+        println!("No known peers");
         return Ok(());
     }
-    println!("既知の宛先 {} 件:", names.len());
+    println!("{} known peer(s):", names.len());
     for n in names {
         println!("- {}", n);
     }

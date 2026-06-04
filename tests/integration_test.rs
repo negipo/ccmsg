@@ -57,7 +57,7 @@ fn test_send_then_inbox_roundtrip() {
 
     let inbox2 = run(&bin, &db, &["inbox", "--project", "/p/beta"]);
     let stdout2 = String::from_utf8_lossy(&inbox2.stdout);
-    assert!(stdout2.contains("未読はありません"));
+    assert!(stdout2.contains("No unread"));
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn test_wait_times_out_without_messages() {
     );
     assert!(waited.status.success());
     let stdout = String::from_utf8_lossy(&waited.stdout);
-    assert!(stdout.contains("タイムアウト"));
+    assert!(stdout.contains("timed out"));
 }
 
 #[test]

@@ -1,35 +1,34 @@
 ---
 name: ccmsg
-description: 他の Claude Code セッション（リポジトリ）から自分宛に届いたメッセージを確認する。ユーザが「メッセージ来てる?」「受信箱見て」「ccmsg」「返事を待って」「待ち受けて」等と言ったときに使う。
+description: Receive messages addressed to you from other Claude Code sessions (repositories) using the ccmsg CLI. Use when the user says things like "any messages?", "check my inbox", "ccmsg", "wait for a reply", or "wait for a message".
 ---
 
-# ccmsg: 受信
+# ccmsg: Receive
 
-他リポジトリのセッションから自分宛に届いたメッセージを受け取る。
+Receive messages addressed to you from sessions running in other repositories.
 
-## 自分宛の未読を確認する（通常）
+## Check your unread messages (normal)
 
 ```bash
 ccmsg inbox --project "$CLAUDE_PROJECT_DIR"
 ```
 
-- 自分の識別子はプロジェクトルートのディレクトリ名（basename）。CLI が `--project` から算出する
-- 未読を表示し、既読化する
-- 初回実行で自分を宛先簿へ登録する（＝参加）。以降ずっと相手から宛先として見える
+- Your identifier is the basename of the project root directory. The CLI derives it from `--project`.
+- Displays unread messages and marks them read.
+- The first run registers you in the peer directory (this is how you "join"). From then on others can address you.
 
-## 返事を待ち受ける
+## Wait for a reply
 
-ユーザが「返事を待って」「待ち受けて」等と言ったとき:
+When the user says "wait for a reply", "wait for a message", or similar:
 
 ```bash
 ccmsg wait --project "$CLAUDE_PROJECT_DIR"
 ```
 
-- 起動時に未読があれば即表示・既読化して終了する
-- なければ新着が届くまでブロックする（1 秒ポーリング、既定 60 秒でタイムアウト）
-- 長く待つ場合は `--timeout <秒>` を渡す
+- Returns immediately if you already have unread messages (displays and marks them read).
+- Otherwise blocks until a new message arrives (1-second polling, default 60-second timeout).
+- Pass `--timeout <seconds>` to wait longer.
 
-## 識別子衝突の警告が出たら
+## If a collision warning appears
 
-同名ディレクトリが別パスで登録済みの場合、未読は表示されるが既読化は保留される。
-どちらかのディレクトリ名を変えて解消するようユーザに伝える。
+If the same directory name is already registered under a different path, unread messages are shown but marking-as-read is held back. Tell the user to resolve it by renaming one of the directories.

@@ -1,22 +1,22 @@
 ---
 name: ccmsg-sending
-description: 他の Claude Code セッション（リポジトリ）へメッセージを送る。ユーザが「○○ に『××』と送って」「○○ に伝えて」等と言ったときに使う。
+description: Send a message to another Claude Code session (repository) using the ccmsg CLI. Use when the user says things like "send '...' to <peer>" or "tell <peer> that ...".
 ---
 
-# ccmsg: 送信
+# ccmsg: Send
 
-他リポジトリのセッション宛にメッセージを送る。
+Send a message to a session running in another repository.
 
 ```bash
-ccmsg send --to <宛先ディレクトリ名> --body "<本文>" --project "$CLAUDE_PROJECT_DIR"
+ccmsg send --to <peer-directory-name> --body "<text>" --project "$CLAUDE_PROJECT_DIR"
 ```
 
-- 送信元（from）は `--project` の basename を CLI が算出する
-- 宛先は相手のプロジェクトルートのディレクトリ名
-- 宛先が宛先簿に未登録だとエラーで停止する。その場合、相手に一度 `/ccmsg`（受信確認）を実行して参加してもらえば送れるようになる
-- 宛先がわからないときは ccmsg-listing-peers skill で一覧を確認する
+- The sender (`from`) is the basename of `--project`, derived by the CLI.
+- The destination is the basename of the recipient's project root directory.
+- If the destination is not in the peer directory, the command fails fast. In that case, the recipient must run `/ccmsg` (check inbox) once to join before they can be addressed.
+- If you don't know the destination name, use the ccmsg-listing-peers skill to list peers.
 
-## 注意
+## Notes
 
-- 自分自身宛・空メッセージは送信できない
-- identity 衝突が検出された場合、誤配信防止のため送信は中止される
+- Sending to yourself or sending an empty body is rejected.
+- If an identity collision is detected, sending is aborted to prevent misdelivery.
