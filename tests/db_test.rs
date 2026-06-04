@@ -1,4 +1,4 @@
-use ccmsg::db::{basename, Database};
+use ccmsg::db::{basename, resolve_identity, Database};
 use ccmsg::models::{ReceiveOutcome, RegisterOutcome};
 
 #[test]
@@ -166,4 +166,11 @@ fn test_reset_clears_messages_and_agents() {
 
     assert_eq!(db.list_agents().unwrap(), Vec::<String>::new());
     assert_eq!(db.peek_unread("repo-b").unwrap().len(), 0);
+}
+
+#[test]
+fn test_resolve_identity_rejects_empty() {
+    assert!(resolve_identity("").is_err());
+    assert!(resolve_identity("/").is_err());
+    assert_eq!(resolve_identity("/p/repo-a").unwrap(), "repo-a");
 }

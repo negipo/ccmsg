@@ -1,9 +1,9 @@
-use crate::db::{basename, Database};
+use crate::db::{resolve_identity, Database};
 use crate::models::{Message, ReceiveOutcome};
 use anyhow::Result;
 
 pub fn run(project: &str) -> Result<()> {
-    let name = basename(project);
+    let name = resolve_identity(project)?;
     let db = Database::open()?;
     match db.receive_once(&name, project)? {
         ReceiveOutcome::Claimed(msgs) => print_messages(&name, &msgs),

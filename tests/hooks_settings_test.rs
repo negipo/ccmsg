@@ -80,3 +80,25 @@ fn test_save_then_load_roundtrip() {
     save_settings(&path, &s).unwrap();
     assert_eq!(load_settings(&path).unwrap(), s);
 }
+
+#[test]
+fn test_unregister_keeps_sibling_group_with_multiple_commands() {
+    let mut s = json!({
+        "hooks": {
+            "SessionStart": [
+                { "hooks": [
+                    { "type": "command", "command": "first" },
+                    { "type": "command", "command": "second" }
+                ] }
+            ]
+        }
+    });
+    register_hook(&mut s);
+    assert!(unregister_hook(&mut s));
+    let arr = s["hooks"]["SessionStart"].as_array().unwrap();
+    assert_eq!(arr.len(), 1);
+    let cmds = arr[0]["hooks"].as_array().unwrap();
+    assert_eq!(cmds.len(), 2);
+    assert_eq!(cmds[0]["command"], "first");
+    assert_eq!(cmds[1]["command"], "second");
+}

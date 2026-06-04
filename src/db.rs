@@ -13,6 +13,18 @@ pub fn basename(project_path: &str) -> String {
         .to_string()
 }
 
+/// --project から識別子（basename）を解決する。
+/// 空（hook 未発火で $CCMSG_PROJECT_DIR が空のとき）ならエラーで案内する。
+pub fn resolve_identity(project: &str) -> Result<String> {
+    let name = basename(project);
+    if name.is_empty() {
+        bail!(
+            "CCMSG_PROJECT_DIR is empty — the SessionStart hook has not fired yet. Start a fresh session (or resume) so ccmsg can resolve your identifier"
+        );
+    }
+    Ok(name)
+}
+
 pub struct Database {
     conn: Connection,
 }

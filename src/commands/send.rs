@@ -1,9 +1,9 @@
-use crate::db::{basename, Database};
+use crate::db::{resolve_identity, Database};
 use crate::models::RegisterOutcome;
 use anyhow::{bail, Result};
 
 pub fn run(to: &str, body: &str, project: &str) -> Result<()> {
-    let from = basename(project);
+    let from = resolve_identity(project)?;
     let db = Database::open()?;
 
     if let RegisterOutcome::Collision { existing_path } = db.register_self(&from, project)? {

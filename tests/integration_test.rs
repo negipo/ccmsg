@@ -158,3 +158,15 @@ fn test_reset_with_yes_clears_db() {
     let stdout = String::from_utf8_lossy(&listed.stdout);
     assert!(stdout.contains("No known peers"));
 }
+
+#[test]
+fn test_inbox_with_empty_project_fails_with_guidance() {
+    let bin = ccmsg_bin();
+    let tmp = TempDir::new().unwrap();
+    let db = tmp.path().join("messages.db");
+
+    let out = run(&bin, &db, &["inbox", "--project", ""]);
+    assert!(!out.status.success());
+    let stderr = String::from_utf8_lossy(&out.stderr);
+    assert!(stderr.contains("CCMSG_PROJECT_DIR"));
+}
