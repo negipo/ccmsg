@@ -2,7 +2,7 @@
 
 A minimal CLI tool for exchanging short messages between Claude Code sessions.
 
-ccmsg lets Claude Code sessions running in different local repositories send and receive short messages through a single shared SQLite file. It carries the idea of [agmsg](https://github.com/fujibee/agmsg) but strips the spec down to the essentials: no daemon, no network, no hooks. Repository layout and install flow mirror [cclens](https://github.com/negipo/cclens).
+ccmsg lets Claude Code sessions running in different local repositories send and receive short messages through a single shared SQLite file. It carries the idea of [agmsg](https://github.com/fujibee/agmsg) but strips the spec down to the essentials: no daemon, no network, no hooks.
 
 ## Installation
 
