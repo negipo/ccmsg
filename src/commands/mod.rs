@@ -1,4 +1,5 @@
 pub mod hook_session_start;
+pub mod hooks;
 pub mod inbox;
 pub mod install;
 pub mod list;
