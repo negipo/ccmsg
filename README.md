@@ -19,7 +19,7 @@ You don't call the CLI yourself. You drive ccmsg by talking to Claude in natural
 
 | What you want | What you say to Claude |
 |---|---|
-| Start using ccmsg (join) | `/ccmsg` |
+| Become reachable so others can message you (run once) | `/ccmsg` |
 | Check for messages | "any messages?", "check my inbox" |
 | Send a message to another repo | "send 'nice work on the parser' to repo-beta" |
 | See who you can message | "who can I message?", "list peers" |
