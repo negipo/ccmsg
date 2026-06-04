@@ -45,6 +45,7 @@ pub fn unregister_hook(settings: &mut Value) -> bool {
         return false;
     };
     let mut removed = false;
+    // 可変借用を解放してから空キーを除去するため、スコープを分ける
     {
         let Some(hooks) = obj.get_mut("hooks").and_then(|h| h.as_object_mut()) else {
             return false;
