@@ -187,7 +187,7 @@ impl Database {
     /// messages / agents を全消去して DB を初期化する
     pub fn reset(&self) -> Result<()> {
         self.conn
-            .execute_batch("DELETE FROM messages; DELETE FROM agents;")?;
+            .execute_batch("BEGIN; DELETE FROM messages; DELETE FROM agents; COMMIT;")?;
         Ok(())
     }
 
