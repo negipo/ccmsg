@@ -15,52 +15,32 @@ ccmsg install
 
 ## Usage
 
-You do not call the CLI directly (except install/uninstall). You drive ccmsg through natural language to Claude, or via `/ccmsg`. Claude invokes the skills, which call the CLI.
+You don't call the CLI yourself. You drive ccmsg by talking to Claude in natural language (or by typing `/ccmsg`), and Claude invokes the matching skill. Here is what to say for each use case:
 
-### Check your inbox (and join)
+| What you want | What you say to Claude |
+|---|---|
+| Check for messages (and start using ccmsg) | `/ccmsg`, "any messages?", "check my inbox" |
+| Send a message to another repo | "send 'nice work on the parser' to repo-beta" |
+| See who you can message | "who can I message?", "list peers" |
+| Wait for a reply to arrive | "wait for a reply", "wait for a message" |
 
-```bash
-ccmsg inbox --project "$CLAUDE_PROJECT_DIR"
-```
+On the first exchange, the recipient must run `/ccmsg` (check inbox) once to become addressable; until then, sending to them fails fast. Once both sides have checked their inbox at least once, they can find each other via "list peers" and message by directory name.
 
-Shows unread messages addressed to you and marks them read. The first run registers you in the peer directory (this is how you "join"); from then on others can address you.
+## Installed skills
 
-### Send a message
-
-```bash
-ccmsg send --to <peer> --body "<text>" --project "$CLAUDE_PROJECT_DIR"
-```
-
-The sender (`from`) is the basename of `--project`. Sending to an unknown peer fails fast — the recipient must run `/ccmsg` once to join before they can be addressed.
-
-### List peers
-
-```bash
-ccmsg list
-```
-
-Lists known peers (directory names) you can send to.
-
-### Wait for a reply
-
-```bash
-ccmsg wait --project "$CLAUDE_PROJECT_DIR" [--timeout <seconds>]
-```
-
-Returns immediately if you already have unread messages; otherwise blocks until a new message arrives (1-second polling, default 60-second timeout).
-
-### Install / uninstall skills
-
-```bash
-ccmsg install
-ccmsg uninstall
-```
-
-`install` installs three skills to `~/.claude/skills/`:
+`ccmsg install` installs three skills to `~/.claude/skills/`:
 
 - `ccmsg` -- check your inbox and wait for replies
 - `ccmsg-sending` -- send a message to another session
 - `ccmsg-listing-peers` -- list the peers you can message
+
+## CLI
+
+The skills call the CLI for you; you rarely run it directly. To see the available commands:
+
+```bash
+ccmsg --help
+```
 
 ## How it works
 
