@@ -42,4 +42,6 @@ pub enum Commands {
     Install,
     /// Remove the installed skills
     Uninstall,
+    /// SessionStart hook: hand this session its project dir via CLAUDE_ENV_FILE
+    HookSessionStart,
 }

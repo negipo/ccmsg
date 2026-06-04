@@ -13,6 +13,7 @@ fn main() -> anyhow::Result<()> {
         Commands::Reset { yes } => ccmsg::commands::reset::run(yes)?,
         Commands::Install => ccmsg::commands::install::run()?,
         Commands::Uninstall => ccmsg::commands::uninstall::run()?,
+        Commands::HookSessionStart => ccmsg::commands::hook_session_start::run()?,
     }
     Ok(())
 }
