@@ -9,19 +9,19 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    /// 自分宛の未読を表示・既読化する（agents 簿へ自己登録）
+    /// Show unread messages addressed to you and mark them read (registers you as a peer)
     Inbox {
         #[arg(long)]
         project: String,
     },
-    /// 新着が来るまでブロックし、到着で表示・既読化する
+    /// Block until a message arrives, then display it and mark it read
     Wait {
         #[arg(long)]
         project: String,
         #[arg(long, default_value = "60")]
         timeout: u64,
     },
-    /// 宛先へメッセージを送る（from は project の basename）
+    /// Send a message to a peer (from is the basename of project)
     Send {
         #[arg(long)]
         to: String,
@@ -30,10 +30,10 @@ pub enum Commands {
         #[arg(long)]
         project: String,
     },
-    /// 既知の宛先（ディレクトリ名）一覧を表示する
+    /// List known peers (directory names)
     List,
-    /// skill を ~/.claude/skills/ へ配置する
+    /// Install skills to ~/.claude/skills/
     Install,
-    /// skill を撤去する
+    /// Remove the installed skills
     Uninstall,
 }
