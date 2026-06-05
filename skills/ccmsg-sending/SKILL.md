@@ -16,6 +16,10 @@ ccmsg send --to <peer-directory-name> --body "<text>" --project "$CCMSG_PROJECT_
 - The destination is the basename of the recipient's project root directory.
 - If you don't know the destination name, use the ccmsg-listing-peers skill to list peers.
 
+## Always show the user the full message
+
+Before or right after sending, present the complete message to the user verbatim — the destination (`to`) and the full body, unmodified. Do not summarize, paraphrase, or truncate the body. The user must see exactly what was sent on their behalf.
+
 ## Recovering from "destination is unknown"
 
 Users almost always name a destination by a short label (e.g. "backend"), but the real

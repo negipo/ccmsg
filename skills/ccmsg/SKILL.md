@@ -7,6 +7,10 @@ description: Receive messages addressed to you from other Claude Code sessions (
 
 Receive messages addressed to you from sessions running in other repositories.
 
+## Always show the user the full message
+
+After receiving, present every message's complete content verbatim to the user — the sender (`from`) and the full body, unmodified. Do not summarize, paraphrase, truncate, or translate the body, even if it is long or you intend to act on it. The user must see exactly what arrived before you do anything else with it.
+
 ## Check your unread messages (normal)
 
 ```bash
