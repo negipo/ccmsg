@@ -81,6 +81,9 @@ fn test_send_to_unknown_fails() {
         ],
     );
     assert!(!sent.status.success());
+    let stderr = String::from_utf8_lossy(&sent.stderr);
+    assert!(stderr.contains("Known peers:"));
+    assert!(stderr.contains("- alpha"));
 }
 
 #[test]

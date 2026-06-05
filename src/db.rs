@@ -137,9 +137,22 @@ impl Database {
             stmt.exists(params![to])?
         };
         if !known {
+            let peers = self.list_agents()?;
+            if peers.is_empty() {
+                bail!(
+                    "destination '{}' is unknown. Once they run /ccmsg to join, you can send to them",
+                    to
+                );
+            }
+            let peer_list = peers
+                .iter()
+                .map(|p| format!("- {}", p))
+                .collect::<Vec<_>>()
+                .join("\n");
             bail!(
-                "destination '{}' is unknown. Once they run /ccmsg to join, you can send to them",
-                to
+                "destination '{}' is unknown. Once they run /ccmsg to join, you can send to them.\nKnown peers:\n{}",
+                to,
+                peer_list
             );
         }
         let now = chrono::Utc::now().to_rfc3339();

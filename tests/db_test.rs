@@ -66,6 +66,18 @@ fn test_send_to_unknown_agent_fails() {
 }
 
 #[test]
+fn test_send_to_unknown_agent_lists_known_peers() {
+    let db = Database::in_memory().unwrap();
+    db.register_self("repo-a", "/p/repo-a").unwrap();
+    db.register_self("acme_web_backend", "/p/acme_web_backend")
+        .unwrap();
+    let err = db.send_message("repo-a", "backend", "hello").unwrap_err();
+    let msg = err.to_string();
+    assert!(msg.contains("Known peers:"));
+    assert!(msg.contains("- acme_web_backend"));
+}
+
+#[test]
 fn test_send_to_self_fails() {
     let db = Database::in_memory().unwrap();
     db.register_self("repo-a", "/p/repo-a").unwrap();
