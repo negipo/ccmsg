@@ -124,13 +124,10 @@ impl Database {
     }
 
     /// 宛先 to へ from から body を投函する。
-    /// 宛先未知・自分宛・空本文はエラーで停止する。
+    /// 宛先未知・空本文はエラーで停止する。
     pub fn send_message(&self, from: &str, to: &str, body: &str) -> Result<()> {
         if body.trim().is_empty() {
             bail!("cannot send an empty message");
-        }
-        if from == to {
-            bail!("cannot send a message to yourself");
         }
         let known: bool = {
             let mut stmt = self.conn.prepare("SELECT 1 FROM agents WHERE name = ?1")?;

@@ -45,5 +45,5 @@ If the error lists no peers at all, the recipient hasn't joined yet: they must r
 
 ## Notes
 
-- Sending to yourself or sending an empty body is rejected.
+- Sending an empty body is rejected. Sending to yourself is allowed.
 - If an identity collision is detected, sending is aborted to prevent misdelivery.

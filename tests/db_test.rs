@@ -78,11 +78,14 @@ fn test_send_to_unknown_agent_lists_known_peers() {
 }
 
 #[test]
-fn test_send_to_self_fails() {
+fn test_send_to_self_succeeds() {
     let db = Database::in_memory().unwrap();
     db.register_self("repo-a", "/p/repo-a").unwrap();
-    let err = db.send_message("repo-a", "repo-a", "hello").unwrap_err();
-    assert!(err.to_string().contains("yourself"));
+    db.send_message("repo-a", "repo-a", "hello").unwrap();
+    let msgs = db.claim_unread("repo-a").unwrap();
+    assert_eq!(msgs.len(), 1);
+    assert_eq!(msgs[0].from_agent, "repo-a");
+    assert_eq!(msgs[0].body, "hello");
 }
 
 #[test]
