@@ -193,6 +193,23 @@ impl Database {
         Ok(out)
     }
 
+    /// 自分宛ての既読メッセージを最新 limit 件、新しい→古いの順で返す（読み取り専用）
+    pub fn recent_read(&self, name: &str, limit: usize) -> Result<Vec<Message>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, from_agent, to_agent, body, created_at, read_at
+             FROM messages
+             WHERE to_agent = ?1 AND read_at IS NOT NULL
+             ORDER BY id DESC
+             LIMIT ?2",
+        )?;
+        let rows = stmt.query_map(params![name, limit as i64], Self::row_to_message)?;
+        let mut out = Vec::new();
+        for r in rows {
+            out.push(r?);
+        }
+        Ok(out)
+    }
+
     /// inbox / wait 一回分の受信。自己登録の結果で claim か peek を分岐する。
     pub fn receive_once(&self, name: &str, project_path: &str) -> Result<ReceiveOutcome> {
         match self.register_self(name, project_path)? {

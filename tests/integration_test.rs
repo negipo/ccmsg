@@ -163,6 +163,58 @@ fn test_reset_with_yes_clears_db() {
 }
 
 #[test]
+fn test_inbox_history_shows_read_messages_without_claiming_unread() {
+    let bin = ccmsg_bin();
+    let tmp = TempDir::new().unwrap();
+    let db = tmp.path().join("messages.db");
+
+    run(&bin, &db, &["inbox", "--project", "/p/alpha"]);
+    run(&bin, &db, &["inbox", "--project", "/p/beta"]);
+    run(
+        &bin,
+        &db,
+        &[
+            "send",
+            "--to",
+            "beta",
+            "--body",
+            "old-one",
+            "--project",
+            "/p/alpha",
+        ],
+    );
+    run(&bin, &db, &["inbox", "--project", "/p/beta"]);
+
+    run(
+        &bin,
+        &db,
+        &[
+            "send",
+            "--to",
+            "beta",
+            "--body",
+            "still-unread",
+            "--project",
+            "/p/alpha",
+        ],
+    );
+
+    let history = run(
+        &bin,
+        &db,
+        &["inbox", "--project", "/p/beta", "--history", "5"],
+    );
+    let stdout = String::from_utf8_lossy(&history.stdout);
+    assert!(stdout.contains("read message(s)"));
+    assert!(stdout.contains("old-one"));
+    assert!(!stdout.contains("still-unread"));
+
+    let inbox = run(&bin, &db, &["inbox", "--project", "/p/beta"]);
+    let stdout = String::from_utf8_lossy(&inbox.stdout);
+    assert!(stdout.contains("still-unread"));
+}
+
+#[test]
 fn test_inbox_with_empty_project_fails_with_guidance() {
     let bin = ccmsg_bin();
     let tmp = TempDir::new().unwrap();

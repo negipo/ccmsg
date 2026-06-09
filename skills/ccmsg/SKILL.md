@@ -34,6 +34,20 @@ ccmsg wait --project "$CCMSG_PROJECT_DIR"
 - Otherwise blocks until a new message arrives (1-second polling, default 60-second timeout).
 - Pass `--timeout <seconds>` to wait longer.
 
+## Re-reading already-read messages (only on request)
+
+Use this only when the user explicitly asks to look back at messages they have
+already read (e.g. "show the last few messages again", "what did they send
+earlier?"). Do not run it as part of a normal inbox check — plain `ccmsg inbox`
+already covers the usual case, and reaching for history unprompted just adds noise.
+
+```bash
+ccmsg inbox --project "$CCMSG_PROJECT_DIR" --history <N>
+```
+
+- Shows the most recent N already-read messages addressed to you, newest first.
+- Read-only: it claims nothing and marks nothing, so it never affects unread delivery.
+
 ## If a collision warning appears
 
 If the same directory name is already registered under a different path, unread messages are shown but marking-as-read is held back. Tell the user to resolve it by renaming one of the directories.

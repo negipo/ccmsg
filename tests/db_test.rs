@@ -189,3 +189,44 @@ fn test_resolve_identity_rejects_empty() {
     assert!(resolve_identity("/").is_err());
     assert_eq!(resolve_identity("/p/repo-a").unwrap(), "repo-a");
 }
+
+#[test]
+fn test_recent_read_returns_newest_first_after_claim() {
+    let db = Database::in_memory().unwrap();
+    db.register_self("repo-a", "/p/repo-a").unwrap();
+    db.register_self("repo-b", "/p/repo-b").unwrap();
+    db.send_message("repo-a", "repo-b", "first").unwrap();
+    db.send_message("repo-a", "repo-b", "second").unwrap();
+    db.claim_unread("repo-b").unwrap();
+
+    let history = db.recent_read("repo-b", 10).unwrap();
+    assert_eq!(history.len(), 2);
+    assert_eq!(history[0].body, "second");
+    assert_eq!(history[1].body, "first");
+}
+
+#[test]
+fn test_recent_read_limits_to_n() {
+    let db = Database::in_memory().unwrap();
+    db.register_self("repo-a", "/p/repo-a").unwrap();
+    db.register_self("repo-b", "/p/repo-b").unwrap();
+    for body in ["m1", "m2", "m3"] {
+        db.send_message("repo-a", "repo-b", body).unwrap();
+    }
+    db.claim_unread("repo-b").unwrap();
+
+    let history = db.recent_read("repo-b", 2).unwrap();
+    assert_eq!(history.len(), 2);
+    assert_eq!(history[0].body, "m3");
+    assert_eq!(history[1].body, "m2");
+}
+
+#[test]
+fn test_recent_read_excludes_unread() {
+    let db = Database::in_memory().unwrap();
+    db.register_self("repo-a", "/p/repo-a").unwrap();
+    db.register_self("repo-b", "/p/repo-b").unwrap();
+    db.send_message("repo-a", "repo-b", "unread").unwrap();
+
+    assert_eq!(db.recent_read("repo-b", 10).unwrap().len(), 0);
+}

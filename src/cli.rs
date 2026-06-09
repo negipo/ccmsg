@@ -13,6 +13,9 @@ pub enum Commands {
     Inbox {
         #[arg(long)]
         project: String,
+        /// Instead, show the most recent N already-read messages (read-only; nothing is claimed)
+        #[arg(long)]
+        history: Option<usize>,
     },
     /// Block until a message arrives, then display it and mark it read
     Wait {
