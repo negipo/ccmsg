@@ -31,7 +31,7 @@ ccmsg wait --project "$CCMSG_PROJECT_DIR"
 ```
 
 - Returns immediately if you already have unread messages (displays and marks them read).
-- Otherwise blocks until a new message arrives (1-second polling, default 60-second timeout).
+- Otherwise blocks until a new message arrives (1-second polling, default 600-second timeout).
 - Pass `--timeout <seconds>` to wait longer.
 
 ## Re-reading already-read messages (only on request)

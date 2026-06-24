@@ -21,7 +21,7 @@ pub enum Commands {
     Wait {
         #[arg(long)]
         project: String,
-        #[arg(long, default_value = "60")]
+        #[arg(long, default_value = "600")]
         timeout: u64,
     },
     /// Send a message to a peer (from is the basename of project)
